@@ -75,9 +75,9 @@ class amacube extends rcube_plugin
         $this->add_button(array(
             'command'    => 'quarantine',
             'type'       => 'link',
-            'class'      => 'button-quarantine',
-            'classsel'   => 'button-quarantine button-selected',
-            'innerclass' => 'button-inner',
+            'class'      => 'button files',
+            'classsel'   => 'button files selected',
+            'innerclass' => 'inner',
             'label'      => 'amacube.quarantine',
         ), 'taskbar');
 		// Add javascript
@@ -94,7 +94,7 @@ class amacube extends rcube_plugin
     {
         $args['actions'][] = array(
 		'action' => 'plugin.amacube-settings',
-		'class' => 'filter-settings',
+		'class' => 'filter',
 		'label' => 'amacube.filter_settings_pagetitle',
 		'title' => 'amacube.filter_settings_pagetitle',
 		'domain' => 'amacube'
@@ -440,7 +440,7 @@ if ( $this->ama_admin === true ) { $messages_table->add('recipient',rcube_utils:
 				$string				.= '<td class="release">'.$this->_show_radio('rel_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_rel_'.$quarantines[$key]['id']).'</td>';
 				$string				.= '<td class="delete">'.$this->_show_radio('del_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_del_'.$quarantines[$key]['id']).'</td>';
 				$string				.= '<td class="date">'.rcube_utils::rep_specialchars_output(date('Y-m-d H:i:s',$quarantines[$key]['received']), 'html', 'strict', true).'</td>';
-				$string				.= '<td class="subject">'. $quarantines[$key]['subject'] ? rcube_utils::rep_specialchars_output($quarantines[$key]['subject'], 'html', 'strict', true) : $this->gettext('no subject') .'</td>';
+				$string				.= '<td class="subject">'.($quarantines[$key]['subject'] ? rcube_utils::rep_specialchars_output($quarantines[$key]['subject'], 'html', 'strict', true) : $this->gettext('no subject')).'</td>';
 				$string				.= '<td class="sender">'.rcube_utils::rep_specialchars_output($quarantines[$key]['sender'], 'html', 'strict', true).'</td>';
 if ( $this->ama_admin === true ) { $string .= '<td class="recipient">'.rcube_utils::rep_specialchars_output($quarantines[$key]['recipient'], 'html', 'strict', true).'</td>'; }
 				$string				.= '<td class="type">'.rcube_utils::rep_specialchars_output($this->gettext('content_decode_'.$quarantines[$key]['content']), 'html', 'strict', true).'</td>';

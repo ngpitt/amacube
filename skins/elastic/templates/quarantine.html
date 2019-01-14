@@ -1,0 +1,31 @@
+<roundcube:include file="includes/layout.html" />
+<roundcube:include file="includes/menu.html" />
+
+<!-- mainscreen -->
+<div id="mainscreen">
+    <!-- toolbar -->
+    <div class="header">
+        <ul id="messagetoolbar" class="toolbar listing iconized">
+            <li role="menuitem">
+                <roundcube:button command="amacube-quarantine-post" type="link" class="button refresh" domain="amacube" label="process" title="process_quarantine" />
+            </li>
+        </ul>
+    </div>
+    <div id="pluginbody" class="uibox contentbox quarantine-pluginbody">
+        <div id="messagelistcontainer" class="boxlistcontent quarantine-messagelistcontainer">
+            <roundcube:object name="plugin.body" />
+        </div>
+        <!-- list footer -->
+        <div id="messagelistfooter">
+            <div id="countcontrols" class="pagenav toolbar footer" role="toolbar">
+                <roundcube:button command="plugin.firstpage" type="link" class="button firstpage disabled" classAct="button firstpage" classSel="button firstpage pressed" innerClass="inner" title="firstpage" content="|&amp;lt;" />
+                <roundcube:button command="plugin.previouspage" type="link" class="button prevpage disabled" classAct="button prevpage" classSel="button prevpage pressed" innerClass="inner" title="previouspage" content="&amp;lt;" />
+                <roundcube:object name="plugin.countdisplay" class="countdisplay quarantine-countdisplay" />
+                <roundcube:button command="plugin.nextpage" type="link" class="button nextpage disabled" classAct="button nextpage" classSel="button nextpage pressed" innerClass="inner" title="nextpage" content="&amp;gt;" />
+                <roundcube:button command="plugin.lastpage" type="link" class="button lastpage disabled" classAct="button lastpage" classSel="button lastpage pressed" innerClass="inner" title="lastpage" content="&amp;gt;|" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<roundcube:include file="includes/footer.html" />

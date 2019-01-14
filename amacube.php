@@ -74,6 +74,7 @@ class amacube extends rcube_plugin
         // Add taskbar button
         $this->add_button(array(
             'command'    => 'quarantine',
+            'type'       => 'link',
             'class'      => 'button-quarantine',
             'classsel'   => 'button-quarantine button-selected',
             'innerclass' => 'button-inner',

@@ -57,6 +57,7 @@ rcube_webmail.prototype.amacube = {
 			$.each(data.messages, function(index, value) {
 				messages.append(value);
 			});			
+			$('#mainscreen input[type=radio]').each(function() { UI.pretty_checkbox(this); });
 		}
 	},
 	// Function for updating message count

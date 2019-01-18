@@ -52,7 +52,7 @@ $labels['content_decode_O'] = 'Oversized';
 $labels['content_decode_T'] = 'MTA error';
 $labels['content_decode_C'] = 'Clean';
 
-$labels['filter_settings_pagetitle'] = 'Filter settings';
+$labels['filter_settings_pagetitle'] = 'Quarantine';
 $labels['section_checks'] = 'Checks';
 $labels['section_quarantine'] = 'Quarantine';
 $labels['section_delivery'] = 'Delivery';

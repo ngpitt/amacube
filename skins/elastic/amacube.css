@@ -20,8 +20,17 @@
     margin-bottom: 2px
 }
 
+a.spam:before {
+    content: "\f717"
+}
+
+a.process:before {
+    content: "\f362"
+}
+
 #mainscreen {
     overflow-y: auto;
+    overflow-x: hidden;
     width: 100%
 }
 
@@ -33,11 +42,15 @@
     justify-content: center
 }
 
+#pluginbody.quarantine-pluginbody #countcontrols .countdisplay {
+    flex-grow: 0
+}
+
 #pluginbody.quarantine-pluginbody #countcontrols a {
     overflow-y: hidden
 }
 
-#pluginbody.quarantine-pluginbody #messagelist > td.subject {
+#pluginbody.quarantine-pluginbody #messagelist td.subject {
     display: table-cell
 }
 
@@ -56,37 +69,20 @@
 
 #pluginbody.quarantine-pluginbody #messagelist thead tr th.release,
 #pluginbody.quarantine-pluginbody #messagelist tr td.release {
-    width: 40px;
     text-align: center
 }
 
 #pluginbody.quarantine-pluginbody #messagelist thead tr th.delete,
 #pluginbody.quarantine-pluginbody #messagelist tr td.delete {
-    width: 40px;
     text-align: center
 }
 
-#pluginbody.quarantine-pluginbody #messagelist thead tr th.received,
-#pluginbody.quarantine-pluginbody #messagelist tr td.received {
-    width: 150px
-}
-
-#pluginbody.quarantine-pluginbody #messagelist thead tr th.sender,
-#pluginbody.quarantine-pluginbody #messagelist tr td.sender {
-    width: 200px
-}
-
-#pluginbody.quarantine-pluginbody #messagelist thead tr th.recipient,
-#pluginbody.quarantine-pluginbody #messagelist tr td.recipient {
-    width: 200px
+#pluginbody.quarantine-pluginbody #messagelist thead tr th.date,
+#pluginbody.quarantine-pluginbody #messagelist tr td.date {
+    white-space: nowrap
 }
 
 #pluginbody.quarantine-pluginbody #messagelist thead tr th.type,
 #pluginbody.quarantine-pluginbody #messagelist tr td.type {
-    width: 100px
-}
-
-#pluginbody.quarantine-pluginbody #messagelist thead tr th.level,
-#pluginbody.quarantine-pluginbody #messagelist tr td.level {
-    width: 100px
+    white-space: nowrap
 }

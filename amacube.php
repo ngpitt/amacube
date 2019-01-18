@@ -75,8 +75,8 @@ class amacube extends rcube_plugin
         $this->add_button(array(
             'command'    => 'quarantine',
             'type'       => 'link',
-            'class'      => 'button files',
-            'classsel'   => 'button files selected',
+            'class'      => 'button spam',
+            'classsel'   => 'button spam selected',
             'innerclass' => 'inner',
             'label'      => 'amacube.quarantine',
         ), 'taskbar');
@@ -94,7 +94,7 @@ class amacube extends rcube_plugin
     {
         $args['actions'][] = array(
 		'action' => 'plugin.amacube-settings',
-		'class' => 'filter',
+		'class' => 'spam',
 		'label' => 'amacube.filter_settings_pagetitle',
 		'title' => 'amacube.filter_settings_pagetitle',
 		'domain' => 'amacube'
@@ -144,98 +144,122 @@ class amacube extends rcube_plugin
 		// Add header to output
 		$output .= html::tag('h1', array('class' => 'boxtitle'), rcube_utils::rep_specialchars_output($this->gettext('filter_settings_pagetitle'), 'html', 'strict', true));
 
-        // Create output : table (checks)
-        $output_table = new html_table(array('cols' => 2, 'cellpadding' => 3, 'class' => 'propform'));
-        // Create output : table : checkbox : spam check
-        $output_table->add('title', html::label('activate_spam_check', $this->gettext('spam_check')));
-		$output_table->add('',$this->_show_checkbox('activate_spam_check', $this->amacube->config->is_active('spam')));
-		// Create output : table : checkbox : virus check
-        $output_table->add('title', html::label('activate_virus_check', $this->gettext('virus_check')));
-		$output_table->add('',$this->_show_checkbox('activate_virus_check', $this->amacube->config->is_active('virus')));
-		// Create output : fieldset
-		$output_legend = html::tag('legend', null , $this->gettext('section_checks'));
-		$output_fieldset = html::tag('fieldset', array('class' => 'checks'),$output_legend.$output_table->show());
-		// Create output : activate
-		$output_checks = $output_fieldset;
+        // Create output : div : checkbox : spam check
+        $label = html::label(array('class' => 'col-sm-4 col-form-label', 'for' => 'activate_spam_check'), $this->gettext('spam_check'));
+		$input = $this->_show_checkbox('activate_spam_check', $this->amacube->config->is_active('spam'));
+        $input_div = html::div(array('class' => 'col-sm-8'), $input);
+        $output_spamcheck = html::div(array('class' => 'form-group row'), $label.$input_div);
+		// Create output : div : checkbox : virus check
+        $label = html::label(array('class' => 'col-sm-4 col-form-label', 'for' => 'activate_virus_check'), $this->gettext('virus_check'));
+		$input = $this->_show_checkbox('activate_virus_check', $this->amacube->config->is_active('virus'));
+        $input_div = html::div(array('class' => 'col-sm-8'), $input);
+        $output_viruscheck = html::div(array('class' => 'form-group row'), $label.$input_div);
+		$output_legend = html::tag('legend', null, $this->gettext('section_checks'));
+		$output_checks = html::tag('fieldset', array('class' => 'checks'), $output_legend.$output_spamcheck.$output_viruscheck);
 
-        // Create output : table (delivery)
-        $output_table = new html_table(array('cols' => 2, 'cellpadding' => 3, 'class' => 'propform'));
-		// Create output : table : radios : spam
-		$output_table->add('title', $this->gettext('spam_delivery'));
-		$string = '';
-        $string .= $this->_show_radio('spam_delivery_deliver','spam_delivery', 'deliver',$this->amacube->config->is_delivery('spam','deliver')).' ';
-		$string .= html::label('spam_delivery_deliver', $this->gettext('deliver'));
-		$string .= $this->_show_radio('spam_delivery_quarantine','spam_delivery', 'quarantine',$this->amacube->config->is_delivery('spam','quarantine')).' ';
-		$string .= html::label('spam_delivery_quarantine', $this->gettext('quarantine'));
-		$string .= $this->_show_radio('spam_delivery_discard','spam_delivery', 'discard',$this->amacube->config->is_delivery('spam','discard'));
-		$string .= html::label('spam_delivery_discard', $this->gettext('discard'));
-		$output_table->add('',$string);
-        // Create output : table : radios : virus
-        $output_table->add('title', $this->gettext('virus_delivery'));
-		$string = '';
-        $string .= $this->_show_radio('virus_delivery_deliver','virus_delivery', 'deliver',$this->amacube->config->is_delivery('virus','deliver')).' ';
-		$string .= html::label('virus_delivery_deliver', $this->gettext('deliver'));
-		$string .= $this->_show_radio('virus_delivery_quarantine','virus_delivery', 'quarantine',$this->amacube->config->is_delivery('virus','quarantine')).' ';
-		$string .= html::label('virus_delivery_quarantine', $this->gettext('quarantine'));
-		$string .= $this->_show_radio('virus_delivery_discard','virus_delivery', 'discard',$this->amacube->config->is_delivery('virus','discard'));
-		$string .= html::label('virus_delivery_discard', $this->gettext('discard'));
-		$output_table->add('',$string);
-        // Create output : table : radios : banned
-        $output_table->add('title', $this->gettext('banned_delivery'));
-		$string = '';
-        $string .= $this->_show_radio('banned_delivery_deliver','banned_delivery', 'deliver',$this->amacube->config->is_delivery('banned','deliver')).' ';
-		$string .= html::label('banned_delivery_deliver', $this->gettext('deliver'));
-		$string .= $this->_show_radio('banned_delivery_quarantine','banned_delivery', 'quarantine',$this->amacube->config->is_delivery('banned','quarantine')).' ';
-		$string .= html::label('banned_delivery_quarantine', $this->gettext('quarantine'));
-		$string .= $this->_show_radio('banned_delivery_discard','banned_delivery', 'discard',$this->amacube->config->is_delivery('banned','discard'));
-		$string .= html::label('banned_delivery_discard', $this->gettext('discard'));
-		$output_table->add('',$string);
-        // Create output : table : radios : bad_header
-        $output_table->add('title', $this->gettext('bad_header_delivery'));
-		$string = '';
-        $string .= $this->_show_radio('badheader_delivery_deliver','badheader_delivery', 'deliver',$this->amacube->config->is_delivery('bad_header','deliver')).' ';
-		$string .= html::label('badheader_delivery_deliver', $this->gettext('deliver'));
-		$string .= $this->_show_radio('badheader_delivery_quarantine','badheader_delivery', 'quarantine',$this->amacube->config->is_delivery('bad_header','quarantine')).' ';
-		$string .= html::label('badheader_delivery_quarantine', $this->gettext('quarantine'));
-		$string .= $this->_show_radio('badheader_delivery_discard','badheader_delivery', 'discard',$this->amacube->config->is_delivery('bad_header','discard'));
-		$string .= html::label('badheader_delivery_discard', $this->gettext('discard'));
-		$output_table->add('',$string);
+		// Create output : div : radios : spam
+        $input = $this->_show_radio('spam_delivery_deliver','spam_delivery', 'deliver',$this->amacube->config->is_delivery('spam','deliver'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'spam_delivery_deliver'), $this->gettext('deliver'));
+        $output_spamdeliver = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+		$input = $this->_show_radio('spam_delivery_quarantine','spam_delivery', 'quarantine',$this->amacube->config->is_delivery('spam','quarantine'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'spam_delivery_quarantine'), $this->gettext('quarantine'));
+        $output_spamquarantine = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+		$input = $this->_show_radio('spam_delivery_discard','spam_delivery', 'discard',$this->amacube->config->is_delivery('spam','discard'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'spam_delivery_discard'), $this->gettext('discard'));
+        $output_spamdiscard = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+        $output_label = html::label(array('class' => 'col-sm-4'), $this->gettext('spam_delivery'));
+        $output_controls = html::div(array('class' => 'col-sm-8'), $output_spamdeliver.$output_spamquarantine.$output_spamdiscard);
+        $output_spamdelivery = html::div(array('class' => 'form-group row'), $output_label.$output_controls);
+        
+        // Create output : div : radios : virus
+        $input = $this->_show_radio('virus_delivery_deliver','virus_delivery', 'deliver',$this->amacube->config->is_delivery('virus','deliver'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'virus_delivery_deliver'), $this->gettext('deliver'));
+        $output_virusdeliver = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+		$input = $this->_show_radio('virus_delivery_quarantine','virus_delivery', 'quarantine',$this->amacube->config->is_delivery('virus','quarantine'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'virus_delivery_quarantine'), $this->gettext('quarantine'));
+        $output_virusquarantine = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+		$input = $this->_show_radio('virus_delivery_discard','virus_delivery', 'discard',$this->amacube->config->is_delivery('virus','discard'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'virus_delivery_discard'), $this->gettext('discard'));
+        $output_virusdiscard = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+        $output_label = html::label(array('class' => 'col-sm-4'), $this->gettext('virus_delivery'));
+        $output_controls = html::div(array('class' => 'col-sm-8'), $output_virusdeliver.$output_virusquarantine.$output_virusdiscard);
+        $output_virusdelivery = html::div(array('class' => 'form-group row'), $output_label.$output_controls);
 
+         // Create output : div : radios : banned
+        $input = $this->_show_radio('banned_delivery_deliver','banned_delivery', 'deliver',$this->amacube->config->is_delivery('banned','deliver'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'banned_delivery_deliver'), $this->gettext('deliver'));
+        $output_banneddeliver = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+		$input = $this->_show_radio('banned_delivery_quarantine','banned_delivery', 'quarantine',$this->amacube->config->is_delivery('banned','quarantine'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'banned_delivery_quarantine'), $this->gettext('quarantine'));
+        $output_bannedquarantine = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+		$input = $this->_show_radio('banned_delivery_discard','banned_delivery', 'discard',$this->amacube->config->is_delivery('banned','discard'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'banned_delivery_discard'), $this->gettext('discard'));
+        $output_banneddiscard = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+        $output_label = html::label(array('class' => 'col-sm-4'), $this->gettext('banned_delivery'));
+        $output_controls = html::div(array('class' => 'col-sm-8'), $output_banneddeliver.$output_bannedquarantine.$output_banneddiscard);
+        $output_banneddelivery = html::div(array('class' => 'form-group row'), $output_label.$output_controls);
+
+        // Create output : div : radios : bad_header
+        $input = $this->_show_radio('badheader_delivery_deliver','badheader_delivery', 'deliver',$this->amacube->config->is_delivery('bad_header','deliver'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'badheader_delivery_deliver'), $this->gettext('deliver'));
+        $output_badheaderdeliver = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+		$input = $this->_show_radio('badheader_delivery_quarantine','badheader_delivery', 'quarantine',$this->amacube->config->is_delivery('bad_header','quarantine'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'badheader_delivery_quarantine'), $this->gettext('quarantine'));
+        $output_badheaderquarantine = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+		$input = $this->_show_radio('badheader_delivery_discard','badheader_delivery', 'discard',$this->amacube->config->is_delivery('bad_header','discard'));
+		$label = html::label(array('class' => 'form-check-label', 'for' => 'badheader_delivery_discard'), $this->gettext('discard'));
+        $output_badheaderdiscard = html::div(array('class' => 'form-check form-check-inline'), $input.$label);
+        $output_label = html::label(array('class' => 'col-sm-4'), $this->gettext('bad_header_delivery'));
+        $output_controls = html::div(array('class' => 'col-sm-8'), $output_badheaderdeliver.$output_badheaderquarantine.$output_badheaderdiscard);
+        $output_badheaderdelivery = html::div(array('class' => 'form-group row'), $output_label.$output_controls);
 
 		// Create output : fieldset
 		$output_legend = html::tag('legend', null, $this->gettext('section_delivery'));
-		$output_fieldset = html::tag('fieldset', array('class' => 'delivery'),$output_legend.$output_table->show());
-		// Create output : quarantine
-		$output_delivery = $output_fieldset;
+		$output_delivery = html::tag('fieldset', array('class' => 'form-group delivery'), $output_legend.$output_spamdelivery.$output_virusdelivery.$output_banneddelivery.$output_badheaderdelivery);
 
-        // Create output : table (levels)
-        $output_table = new html_table(array('cols' => 2, 'cellpadding' => 3, 'class' => 'propform'));
-		// Create output : table : input : sa_tag2_level
-        $output_table->add('title', html::label('spam_tag2_level', $this->gettext('spam_tag2_level')));
-        $output_table->add('',$this->_show_inputfield('spam_tag2_level', $this->amacube->config->policy_setting['spam_tag2_level']));
-		// Create output : table : input : sa_kill_level
-		$output_table->add('title', html::label('spam_kill_level', $this->gettext('spam_kill_level')));
-        $output_table->add('',$this->_show_inputfield('spam_kill_level', $this->amacube->config->policy_setting['spam_kill_level']));
-		// Create output : table : input : sa_cutoff_level
-		$output_table->add('title', html::label('spam_quarantine_cutoff_level', $this->gettext('spam_quarantine_cutoff_level')));
-        $output_table->add('',$this->_show_inputfield('spam_quarantine_cutoff_level', $this->amacube->config->policy_setting['spam_quarantine_cutoff_level']));
+        // Create output : div : checkbox : spam check
+        $label = html::label(array('class' => 'col-sm-4 col-form-label', 'for' => 'activate_spam_check'), $this->gettext('spam_check'));
+		$input = $this->_show_checkbox('activate_spam_check', $this->amacube->config->is_active('spam'));
+        $input_div = html::div(array('class' => 'col-sm-8'), $input);
+        $output_spamcheck = html::div(array('class' => 'form-group row'), $label.$input_div);
+		// Create output : div : checkbox : virus check
+        $label = html::label(array('class' => 'col-sm-4 col-form-label', 'for' => 'activate_virus_check'), $this->gettext('virus_check'));
+		$input = $this->_show_checkbox('activate_virus_check', $this->amacube->config->is_active('virus'));
+        $input_div = html::div(array('class' => 'col-sm-8'), $input);
+        $output_viruscheck = html::div(array('class' => 'form-group row'), $label.$input_div);
+		$output_legend = html::tag('legend', null, $this->gettext('section_checks'));
+		$output_checks = html::tag('fieldset', array('class' => 'checks'), $output_legend.$output_spamcheck.$output_viruscheck);
+
+		// Create output : div : input : sa_tag2_level
+        $label = html::label(array('class' => 'col-sm-4', 'for' => 'spam_tag2_level'), $this->gettext('spam_tag2_level'));
+        $input = $this->_show_inputfield('spam_tag2_level', $this->amacube->config->policy_setting['spam_tag2_level']);
+        $input_div = html::div(array('class' => 'col-sm-8'), $input);
+        $output_tag = html::div(array('class' => 'form-group row'), $label.$input_div);
+		// Create output : div : input : sa_kill_level
+		$label = html::label(array('class' => 'col-sm-4', 'for' => 'spam_kill_level'), $this->gettext('spam_kill_level'));
+        $input = $this->_show_inputfield('spam_kill_level', $this->amacube->config->policy_setting['spam_kill_level']);
+        $input_div = html::div(array('class' => 'col-sm-8'), $input);
+        $output_kill = html::div(array('class' => 'form-group row'), $label.$input_div);
+		// Create output : div : input : sa_cutoff_level
+		$label = html::label(array('class' => 'col-sm-4', 'for' => 'spam_quarantine_cutoff_level'), $this->gettext('spam_quarantine_cutoff_level'));
+        $input = $this->_show_inputfield('spam_quarantine_cutoff_level', $this->amacube->config->policy_setting['spam_quarantine_cutoff_level']);
+        $input_div = html::div(array('class' => 'col-sm-8'), $input);
+        $output_cutoff = html::div(array('class' => 'form-group row'), $label.$input_div);
 		// Create output : fieldset
 		$output_legend = html::tag('legend', null, $this->gettext('section_levels'));
-		$output_fieldset = html::tag('fieldset', array('class' => 'levels'),$output_legend.$output_table->show());
-		// Create output : levels
-		$output_levels = $output_fieldset;
+		$output_levels = html::tag('fieldset', array('class' => 'levels'), $output_legend.$output_tag.$output_kill.$output_cutoff);
 
 		// Create output : button
 		$output_button = html::div('footerleft formbuttons',$this->rc->output->button(array(
             'command' => 'plugin.amacube-settings-post',
-            'type' => 'input',
-            'class' => 'button mainaction',
+            'type' => 'button',
+            'class' => 'btn btn-primary submit',
             'label' => 'save'
         )));
 
 
 		// Add form to container and container to output
-        $output_form .= html::div(array('id' => 'preferences-details', 'class' => 'boxcontent'),$this->rc->output->form_tag(array(
+        $output_form .= html::div(array('id' => 'preferences-details', 'class' => 'formcontent'),$this->rc->output->form_tag(array(
             'id' => 'amacubeform',
             'name' => 'amacubeform',
             'class' => 'propform',
@@ -256,7 +280,7 @@ class amacube extends rcube_plugin
         $this->rc->output->add_gui_object('amacubeform', 'amacubeform');
 		// Add button to output
 		$output_form .= $output_button;
-		$output .= html::div(array('id' => 'preferences-wrapper', 'class' => 'scrollable'),$output_form);
+		$output .= html::div(array('id' => 'preferences-wrapper', 'class' => 'formcontainer'),$output_form);
 		// Send feedback
 		$this->feedback();
 		// Return output
@@ -426,19 +450,19 @@ if ( $this->ama_admin === true ) { $messages_table->add_header('recipient',rcube
         foreach ($quarantines as $key => $value) {
         	if (!$ajax) {
 	        	if ($key >= $pagination['start'] && $key < $pagination['stop']) {
-		            $messages_table->add('release',$this->_show_radio('rel_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_rel_'.$quarantines[$key]['id']));
-		            $messages_table->add('delete',$this->_show_radio('del_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_del_'.$quarantines[$key]['id']));
-		            $messages_table->add('date',rcube_utils::rep_specialchars_output(date('Y-m-d H:i:s',$quarantines[$key]['received']), 'html', 'strict', true));
+		            $messages_table->add('release', html::div(array('class' => 'form-check'), $this->_show_radio('rel_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_rel_'.$quarantines[$key]['id'])));
+		            $messages_table->add('delete', html::div(array('class' => 'form-check'), $this->_show_radio('del_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_del_'.$quarantines[$key]['id'])));
+		            $messages_table->add('date', rcube_utils::rep_specialchars_output(date('Y-m-d H:i:s',$quarantines[$key]['received']), 'html', 'strict', true));
 		            $messages_table->add('subject', $quarantines[$key]['subject'] ? rcube_utils::rep_specialchars_output($quarantines[$key]['subject'], 'html', 'strict', true) : $this->gettext('no subject'));
-		            $messages_table->add('sender',rcube_utils::rep_specialchars_output($quarantines[$key]['sender'], 'html', 'strict', true));
+		            $messages_table->add('sender', rcube_utils::rep_specialchars_output($quarantines[$key]['sender'], 'html', 'strict', true));
 if ( $this->ama_admin === true ) { $messages_table->add('recipient',rcube_utils::rep_specialchars_output($quarantines[$key]['recipient'], 'html', 'strict', true)); }
-		            $messages_table->add('type',rcube_utils::rep_specialchars_output($this->gettext('content_decode_'.$quarantines[$key]['content']), 'html', 'strict', true));
-		            $messages_table->add('level',rcube_utils::rep_specialchars_output($quarantines[$key]['level'], 'html', 'strict', true));
+		            $messages_table->add('type', rcube_utils::rep_specialchars_output($this->gettext('content_decode_'.$quarantines[$key]['content']), 'html', 'strict', true));
+		            $messages_table->add('level', rcube_utils::rep_specialchars_output($quarantines[$key]['level'], 'html', 'strict', true));
 	        	}
         	} else {
 				$string 			= '<tr>';
-				$string				.= '<td class="release">'.$this->_show_radio('rel_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_rel_'.$quarantines[$key]['id']).'</td>';
-				$string				.= '<td class="delete">'.$this->_show_radio('del_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_del_'.$quarantines[$key]['id']).'</td>';
+				$string				.= '<td class="release">'.html::div(array('class' => 'form-check'), $this->_show_radio('rel_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_rel_'.$quarantines[$key]['id'])).'</td>';
+				$string				.= '<td class="delete">'.html::div(array('class' => 'form-check'), $this->_show_radio('del_'.$quarantines[$key]['id'],$quarantines[$key]['id'],'_del_'.$quarantines[$key]['id'])).'</td>';
 				$string				.= '<td class="date">'.rcube_utils::rep_specialchars_output(date('Y-m-d H:i:s',$quarantines[$key]['received']), 'html', 'strict', true).'</td>';
 				$string				.= '<td class="subject">'.($quarantines[$key]['subject'] ? rcube_utils::rep_specialchars_output($quarantines[$key]['subject'], 'html', 'strict', true) : $this->gettext('no subject')).'</td>';
 				$string				.= '<td class="sender">'.rcube_utils::rep_specialchars_output($quarantines[$key]['sender'], 'html', 'strict', true).'</td>';
@@ -493,7 +517,7 @@ if ( $this->ama_admin === true ) { $string .= '<td class="recipient">'.rcube_uti
 
 	function quarantine_display_count() {
 
-		return html::span(array('id' => 'rcmcountdisplay', 'class' => 'countdisplay quarantine-countdisplay'),$this->rc->amacube->pagecount_string);
+		return html::span(array('id' => 'rcmcountdisplay', 'class' => 'pagenav-text countdisplay quarantine-countdisplay'),$this->rc->amacube->pagecount_string);
 
 	}
 
@@ -560,14 +584,14 @@ if ( $this->ama_admin === true ) { $string .= '<td class="recipient">'.rcube_uti
     }
     function _show_radio($id, $name, $value, $checked = false)
     {
-        $attr_array = array('name' => $name,'id' => $id);
+        $attr_array = array('name' => $name, 'id' => $id, 'class' => 'form-check-input');
         if ($checked) {
             $attr_array['checked'] = 'checked';
         }
         //$box = new html_checkbox($attr_array);
         $attr_array['type'] = 'radio';
 		$attr_array['value'] = $value;
-        $box = html::tag('input',$attr_array);
+        $box = html::tag('input', $attr_array);
         return $box;
     }
     function _show_inputfield($id, $value)

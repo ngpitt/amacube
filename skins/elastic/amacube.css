@@ -38,23 +38,11 @@ a.process:before {
     top: 42px
 }
 
-#pluginbody.quarantine-pluginbody #countcontrols {
-    justify-content: center
-}
-
-#pluginbody.quarantine-pluginbody #countcontrols .countdisplay {
-    flex-grow: 0
-}
-
-#pluginbody.quarantine-pluginbody #countcontrols a {
-    overflow-y: hidden
-}
-
 #pluginbody.quarantine-pluginbody #messagelist td.subject {
     display: table-cell
 }
 
-#pluginbody.quarantine-pluginbody #messagelist > thead {
+#pluginbody.quarantine-pluginbody #messagelist thead {
     display: table-header-group
 }
 
@@ -86,3 +74,20 @@ a.process:before {
 #pluginbody.quarantine-pluginbody #messagelist tr td.type {
     white-space: nowrap
 }
+
+#pluginbody.quarantine-pluginbody #controlscontainer {
+    padding: .5rem 1rem
+}
+
+#pluginbody.quarantine-pluginbody #countcontrols {
+    justify-content: center
+}
+
+#pluginbody.quarantine-pluginbody #countcontrols .countdisplay {
+    flex-grow: 0
+}
+
+#pluginbody.quarantine-pluginbody #countcontrols a {
+    overflow-y: hidden
+}
+

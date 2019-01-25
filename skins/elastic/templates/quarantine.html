@@ -7,17 +7,14 @@
     <div class="header" role="toolbar">
         <a class="button icon menu-button" href="#menu"><span class="inner"><roundcube:label name="menu" /></span></a>
         <span class="header-title">Quarantine</span>
-        <ul class="toolbar listing iconized">
-            <li class="menuitem">
-                <roundcube:button command="amacube-quarantine-post" type="link" class="button process" innerClass="inner" domain="amacube" label="process" title="process_quarantine" />
-            </li>
-        </ul>
     </div>
     <div id="pluginbody" class="uibox contentbox quarantine-pluginbody">
-        <div id="messagelistcontainer" class="boxlistcontent quarantine-messagelistcontainer">
+        <div id="messagelistcontainer" class="boxlistcontent">
             <roundcube:object name="plugin.body" />
         </div>
-        <!-- list footer -->
+        <div id="controlscontainer">
+            <roundcube:button command="amacube-quarantine-post" type="button" class="btn btn-primary process" innerClass="inner" domain="amacube" label="process" title="process_quarantine" />
+        </div>
         <div id="messagelistfooter">
             <div id="countcontrols" class="pagenav toolbar footer" role="toolbar">
                 <roundcube:button command="plugin.firstpage" type="link" class="button firstpage disabled" classAct="button firstpage" classSel="button firstpage pressed" innerClass="inner" title="firstpage" content="|&amp;lt;" />

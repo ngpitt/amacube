@@ -16,12 +16,12 @@
             <roundcube:button command="amacube-quarantine-post" type="button" class="btn btn-primary process" innerClass="inner" domain="amacube" label="process" title="process_quarantine" />
         </div>
         <div id="messagelistfooter">
-            <div id="countcontrols" class="pagenav toolbar footer" role="toolbar">
-                <roundcube:button command="plugin.firstpage" type="link" class="button firstpage disabled" classAct="button firstpage" classSel="button firstpage pressed" innerClass="inner" title="firstpage" content="|&amp;lt;" />
-                <roundcube:button command="plugin.previouspage" type="link" class="button prevpage disabled" classAct="button prevpage" classSel="button prevpage pressed" innerClass="inner" title="previouspage" content="&amp;lt;" />
-                <roundcube:object name="plugin.countdisplay" class="countdisplay quarantine-countdisplay" />
-                <roundcube:button command="plugin.nextpage" type="link" class="button nextpage disabled" classAct="button nextpage" classSel="button nextpage pressed" innerClass="inner" title="nextpage" content="&amp;gt;" />
-                <roundcube:button command="plugin.lastpage" type="link" class="button lastpage disabled" classAct="button lastpage" classSel="button lastpage pressed" innerClass="inner" title="lastpage" content="&amp;gt;|" />
+            <div id="countcontrols" class="pagenav menu footer" role="toolbar">
+                <roundcube:button command="plugin.firstpage" type="link" class="firstpage disabled" classAct="firstpage" classSel="firstpage pressed" innerClass="inner" title="firstpage" content="|&amp;lt;" />
+                <roundcube:button command="plugin.previouspage" type="link" class="prevpage disabled" classAct="prevpage" classSel="prevpage pressed" innerClass="inner" title="previouspage" content="&amp;lt;" />
+                <roundcube:object name="plugin.countdisplay" class="pagenav-text" />
+                <roundcube:button command="plugin.nextpage" type="link" class="nextpage disabled" classAct="nextpage" classSel="nextpage pressed" innerClass="inner" title="nextpage" content="&amp;gt;" />
+                <roundcube:button command="plugin.lastpage" type="link" class="lastpage disabled" classAct="lastpage" classSel="lastpage pressed" innerClass="inner" title="lastpage" content="&amp;gt;|" />
             </div>
         </div>
     </div>

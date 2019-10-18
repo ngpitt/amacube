@@ -84,7 +84,8 @@ a.process:before {
 }
 
 #pluginbody.quarantine-pluginbody #countcontrols .countdisplay {
-    flex-grow: 0
+    flex-grow: 4;
+    font-weight: bold
 }
 
 #pluginbody.quarantine-pluginbody #countcontrols a {
